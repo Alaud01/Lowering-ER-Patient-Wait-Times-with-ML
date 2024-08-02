@@ -408,8 +408,8 @@ y_pred = multi_target_dt.predict(X_test)
 accuracies = {col: accuracy_score(y_test[col], y_pred[:, list(y_test.columns).index(col)]) for col in y_test.columns}
 
 ypred = pd.DataFrame(y_pred)
-count = 0
-count1 = 0
+count = 0  # to count overall cases
+count1 = 0  # to count cases where prediction accuracy is high (in this case >= 90%)
 TP_count = 0
 FP_count = 0
 FN_count = 0
