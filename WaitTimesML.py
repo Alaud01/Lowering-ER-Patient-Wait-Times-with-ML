@@ -1,3 +1,4 @@
+# Import required Libraries
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -17,7 +18,7 @@ import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 from sklearn.metrics import precision_score, recall_score, f1_score
 
-# Read .csv's
+# Read .csv's fomr MIMIC-IV dataset
 diagnosisdf = pd.read_csv(r"C:\Users\athar\OneDrive\Documents\UBC 4th Year\Thesis\mimic-iv-ed-2.2\ed\diagnosis.csv\diagnosis.csv")
 edstaysdf = pd.read_csv(r"C:\Users\athar\OneDrive\Documents\UBC 4th Year\Thesis\mimic-iv-ed-2.2\ed\edstays.csv\edstays.csv")
 triagedf = pd.read_csv(r"C:\Users\athar\OneDrive\Documents\UBC 4th Year\Thesis\mimic-iv-ed-2.2\ed\triage.csv\triage.csv")
@@ -81,7 +82,7 @@ medcount_lim = sum(countsdf['count']) * 0.75
 tally = 0
 indexcounter = 0
 
-# Filter out lwoer 25% of medications
+# Filter out lower 25% of medications
 for index, medrow in countsdf.iterrows():
     add = medrow['count']
     tally += add
@@ -100,6 +101,7 @@ for idx in countsdf.index:
     if idx > indexcounter:
         colors[idx] = 'red'
 
+# Plot the bar graph to show top relevant vs irrelevant medications
 plt.bar(countsdf.index, countsdf['count'], color=colors)
 plt.title('Bar Chart Representing Frequency of Medications Administered for BTIs')
 red_patch = mpatches.Patch(color='red', label='Bottom 25%')
@@ -110,6 +112,7 @@ plt.ylabel('Log Scale Frequency of Medication')
 plt.yscale('log')
 plt.show()
 
+# Remove duplicates and filter further to only include required stay_id's
 pyxisdf_singular = pyxisdf.drop_duplicates(subset=['stay_id', 'simplified_medication']).reset_index()
 
 pyxisdf_singular = pyxisdf_singular.loc[pyxisdf_singular['simplified_medication'].isin(simp_med_100)]
@@ -120,6 +123,7 @@ uti_df = uti_df.loc[uti_df['stay_id'].isin(uti_set)]
 
 dataframe = pyxisdf_singular[['stay_id', 'simplified_medication']]
 
+# Develop a function for creating a transposed dataframe
 def create_transposed_df(df):
     # Pivot the table to get unique ids as rows and unique medications as columns
     # Fill missing values with 0, as those combinations do not exist in the input table
@@ -134,6 +138,7 @@ def create_transposed_df(df):
     
     return transposed_df
 
+# Develop a function for encoding the previously transposed dataframe
 def encode_pad_transpose(df, stay_id_col, medication_col):
     """
     Encodes and pads the medication data of a DataFrame based on stay_id, and provides a dictionary of encoded values to medication names.
@@ -171,6 +176,7 @@ def encode_pad_transpose(df, stay_id_col, medication_col):
 
     return grouped, value_to_med_name
 
+# Apply the functions and merge dataframes respective to create a cohesive table to be fed to the model
 admstrd_grouped = encode_pad_transpose(dataframe, 'stay_id', 'simplified_medication')[0]
 admstrd_dict = encode_pad_transpose(dataframe, 'stay_id', 'simplified_medication')[1]
 recon_grouped = encode_pad_transpose(medrecondf, 'stay_id', 'etccode')[0]
@@ -190,6 +196,7 @@ merge_df = pd.merge(triage, merge_df1, on='stay_id', how='inner')
 merge_df = merge_df.iloc[:, 1:]
 merge_df = merge_df.dropna()
 
+# Plotting the respective variables to visualize the data (change variables as necessary)
 plt.hist(merge_df['sbp'], bins=100, alpha=0.7, label='systolic blood pressure')  # Adjust the number of bins as necessary
 plt.xlabel('Patient Sysstolic Blood Pressure')
 plt.ylabel('Frequency')
@@ -225,6 +232,7 @@ precisions = []
 recalls = []
 f1_scores = []
 
+# Iterate through to calculate the scores respectively
 for i in range(y_test.shape[1]):
     precisions.append(precision_score(y_test.iloc[:, i], y_pred[:, i], average='macro'))
     recalls.append(recall_score(y_test.iloc[:, i], y_pred[:, i], average='macro'))
@@ -243,11 +251,12 @@ print("Overall Precision: {:.4f}".format(overall_precision))
 print("Overall Recall: {:.4f}".format(overall_recall))
 print("Overall F1 Score: {:.4f}".format(overall_f1))
 
-# Since we have multiple targets, we need to calculate accuracy for each one
+# Due to having multiple targets, we need to calculate accuracy for each one separately
 accuracies = y_test.columns.map(lambda col: accuracy_score(y_test[col], y_pred[:,list(y_test.columns).index(col)]))
 
 y_test_array = y_test.to_numpy()
 
+# Develop a function to calculate accuracy by comparing the predicted array (pred_array) with the test data array (test_array)
 def calculate_accuracy_and_frequency(pred_array, test_array):
     # Ensure both arrays have the same shape
     assert pred_array.shape == test_array.shape, "Arrays must have the same shape."
@@ -276,9 +285,11 @@ def calculate_accuracy_and_frequency(pred_array, test_array):
 
     return acc_list, freq_list
 
+# Apply accuracy function
 acc_list1 = calculate_accuracy_and_frequency(y_pred, y_test_array)[0]
 freq_list1 = calculate_accuracy_and_frequency(y_pred, y_test_array)[1]
 
+# Plot bar graph showing the model accuracy
 # Positions of the left bar-groups
 barWidth = 0.3
 r1 = np.arange(1, len(acc_list1)+1)
@@ -312,6 +323,7 @@ F_1 = []
 unique_case_pred = set()
 unique_case_act = set()
 
+# Iterate through and calculate true accuracy, positives, negatives, etc.
 for i, row in ypred.iterrows():
     # Accuracy Calculation
     for x in range(0, 10):
@@ -354,6 +366,7 @@ for i, row in ypred.iterrows():
 unique_pred_list = [list(row) for row in unique_case_pred]
 unique_act_list = [list(row) for row in unique_case_act]
 
+# Develop function to derive back to medication name
 def replace_with_med_name(num_list, num_to_med_dict):
     replaced_list = []
     for sublist in num_list:
@@ -489,7 +502,7 @@ string_range = [str(i) for i in range(1, 15+1)]
 
 df_1 = master_df.loc[master_df['case:concept:name'].isin(string_range)]
 
-# Create process flows using pm4py library
+# Create process flows using pm4py library, change accordingly to compare different treatment pathways
 log = pm4py.convert_to_event_log(df_1)
 net, initial_marking, final_marking = alpha_miner.apply(log)
 gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters={"node_font_size": 20, "edge_font_size": 20})
