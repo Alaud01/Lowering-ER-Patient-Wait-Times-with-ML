@@ -2,7 +2,7 @@
 
 ## A thesis showcasing how machine learning algorithms and process mining can be utilized for pre-arrival administration of medications and treatments in hospital emergency rooms.
 
-** For a detailed description on how the study was conducted please take a look at the thesis pdf document uploaded. **
+** For a detailed description on how the study was conducted please take a look at https://github.com/Alaud01/Lowering-ER-Patient-Wait-Times-with-ML/blob/main/Lower%20ER%20Wait%20Times%20with%20ML%20and%20Process%20Mining.pdf **
 
 This project is part of my undergraduate thesis, utilizing the MIMIC-IV dataset from Harvard Medical School to explore how medication administration can be predicted using patient vitals (e.g., blood pressure, heart rate), acuity (injury/disease severity), and other factors. The study focuses primarily on Urinary Tract Infections (UTIs) and Brain Trauma Injuries (BTIs), which are challenging to assess due to their variable severity, often leading to time-consuming treatment processes. 
 
