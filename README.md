@@ -29,4 +29,4 @@ The Random Forests model showed improved prediction accuracy for medication admi
 
 ## How to Use
 
-Since this is an undergraduate thesis study, please do not copy or modify this. However, feel free to use this as a reference or guide for your own projects or studies.
+Since this is an undergraduate thesis study, please do not copy or modify this. However, feel free to use this as a reference or guide for your own projects or studies :)
