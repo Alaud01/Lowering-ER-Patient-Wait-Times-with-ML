@@ -18,13 +18,13 @@ import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 from sklearn.metrics import precision_score, recall_score, f1_score
 
-# Read .csv's fomr MIMIC-IV dataset
-diagnosisdf = pd.read_csv(r"C:\Users\athar\OneDrive\Documents\UBC 4th Year\Thesis\mimic-iv-ed-2.2\ed\diagnosis.csv\diagnosis.csv")
-edstaysdf = pd.read_csv(r"C:\Users\athar\OneDrive\Documents\UBC 4th Year\Thesis\mimic-iv-ed-2.2\ed\edstays.csv\edstays.csv")
-triagedf = pd.read_csv(r"C:\Users\athar\OneDrive\Documents\UBC 4th Year\Thesis\mimic-iv-ed-2.2\ed\triage.csv\triage.csv")
-medrecondf = pd.read_csv(r"C:\Users\athar\OneDrive\Documents\UBC 4th Year\Thesis\mimic-iv-ed-2.2\ed\medrecon.csv\medrecon.csv")
-pyxisdf = pd.read_csv(r"C:\Users\athar\OneDrive\Documents\UBC 4th Year\Thesis\mimic-iv-ed-2.2\ed\pyxis.csv\pyxis.csv")
-vitalsdf = pd.read_csv(r"C:\Users\athar\OneDrive\Documents\UBC 4th Year\Thesis\mimic-iv-ed-2.2\ed\vitalsign.csv\vitalsign.csv")
+# Read respective .csv's from MIMIC-IV dataset
+diagnosisdf = pd.read_csv(file_path1)
+edstaysdf = pd.read_csv(file_path2)
+triagedf = pd.read_csv(file_path3)
+medrecondf = pd.read_csv(file_path4)
+pyxisdf = pd.read_csv(file_path5)
+vitalsdf = pd.read_csv(file_path6)
 
 # CLEANUP DATAFRAMES
 # rename columns to avoid duplicate column titles
